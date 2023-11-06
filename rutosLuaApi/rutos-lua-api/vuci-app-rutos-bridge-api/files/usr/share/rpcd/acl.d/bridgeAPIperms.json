@@ -1,0 +1,17 @@
+{
+  "services/example": {
+    "description": "Example App permissions",
+    "read": {
+      "api": [
+        "/bridges/*",
+        "/bridgeconfig/*"
+      ]
+    },
+    "write": {
+      "api": [
+        "/bridgeconfig/*",
+        "/bridges/*"
+      ]
+    }
+  }
+}

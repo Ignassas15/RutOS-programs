@@ -1,0 +1,150 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Vuci routing table API",
+    "description": "API for getting information about available routing tables and routes currently used",
+    
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "192.168.1.1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "rtables",
+      "description": "Route for getting information about routing tables"
+    }
+  ],
+  "paths": {
+    "/rtables/tables": {
+      "get": {
+        "tags": [
+          "rtables"
+        ],
+        "summary": "Information about available routing tables",
+        "description": "Returns a list of routing table name and id mappings",
+        "operationId": "tables",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tablesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rtables/mainroutes": {
+      "get": {
+        "tags": [
+          "rtables"
+        ],
+        "summary": "Information about main routes",
+        "description": "Returns all main route information in an array",
+        "operationId": "mainroutes",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/mainroutesResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "tablesResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "name"]
+                }
+              }
+            },
+            "required": ["entries"]
+          }
+  },
+  "required": ["success", "data"]
+      },
+      "mainroutesResponse": {
+         "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "entries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "dev": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "src": {
+                      "type": "string"
+                    },
+                    "metric": {
+                      "type": "string"
+                    },
+                    "destination": {
+                      "type": "string"
+                    },
+                    "proto": {
+                      "type": "string"
+                    },
+                    "via": {
+                      "type": "string"
+                    },
+                    "scope": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "required": ["entries"]
+          }
+        },
+        "required": ["success", "data"]
+      }
+   }
+ }
+}

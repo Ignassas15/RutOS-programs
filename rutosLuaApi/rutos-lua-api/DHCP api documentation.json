@@ -1,0 +1,180 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Vuci DHCP client API",
+    "description": "API for getting information about IPv4 and IPv6 leases",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "192.168.1.1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "dhcp_devices",
+      "description": "Route for getting information about dhcp leases"
+    }
+  ],
+  "paths": {
+    "/dhcp_devices/ipv4leases": {
+      "get": {
+        "tags": [
+          "dhcp_devices"
+        ],
+        "summary": "Information about active IPv4 leases",
+        "description": "Returns a list of active IPv4 leases",
+        "operationId": "ipv4leases",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IPv4LeaseInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dhcp_devices/ipv6leases": {
+      "get": {
+        "tags": [
+          "dhcp_devices"
+        ],
+        "summary": "Information about active IPv6 leases",
+        "description": "Returns a list of active IPv6 leases",
+        "operationId": "ipv6leases",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IPv6LeaseInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "IPv6LeaseInfo": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "leases": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "valid": {
+                      "type": "integer"
+                    },
+                    "assigned": {
+                      "type": "integer"
+                    },
+                    "iaid": {
+                      "type": "integer"
+                    },
+                    "duid": {
+                      "type": "string"
+                    },
+                    "ipv6-addr": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "preferred-lifetime": {
+                            "type": "integer"
+                          },
+                          "valid-lifetime": {
+                            "type": "integer"
+                          },
+                          "address": {
+                            "type": "string",
+                            "format": "ipv6"
+                          }
+                        },
+                        "required": ["preferred-lifetime", "valid-lifetime", "address"]
+                      }
+                    },
+                    "flags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "hostname": {
+                      "type": "string"
+                    },
+                    "accept-reconf": {
+                      "type": "boolean"
+                    },
+                    "interface": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["valid", "assigned", "iaid", "duid", "ipv6-addr", "flags", "hostname", "accept-reconf", "interface"]
+                }
+              }
+            },
+            "required": ["leases"]
+          }
+        },
+        "required": ["success", "data"]
+      },
+      "IPv4LeaseInfo":{
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "leases": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "hostname": {
+                        "type": "string"
+                      },
+                      "timestamp": {
+                        "type": "integer"
+                      },
+                      "macaddr": {
+                        "type": "string",
+                        "format": "mac"
+                      },
+                      "ip": {
+                        "type": "string",
+                        "format": "ipv4"
+                      }
+                    },
+                    "required": ["hostname", "timestamp", "macaddr", "ip"]
+                  }
+                }
+              },
+              "required": ["leases"]
+            }
+          },
+        "required": ["success", "data"]
+      }
+  }
+  }
+}

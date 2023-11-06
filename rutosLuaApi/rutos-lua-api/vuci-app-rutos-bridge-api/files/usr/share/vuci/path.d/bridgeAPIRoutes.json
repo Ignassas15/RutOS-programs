@@ -1,0 +1,4 @@
+[
+    {"/bridges/{service_group}/{sid}": "services/function_bridges"},
+    {"/bridgeconfig/{service_group}/{sid}": "services/config_bridges"}
+]

@@ -1,0 +1,301 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Vuci bridge API",
+    "description": "API for getting information and configuring bridge interfaces",
+    
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "192.168.1.1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "bridges",
+      "description": "Route for getting information about bridge"
+    },
+    {
+      "name": "bridgeconfig",
+      "description": "Route for configuring existing bridge interfaces"
+    }
+  ],
+  "paths": {
+    "/bridges/members": {
+      "get": {
+        "tags": [
+          "bridges"
+        ],
+        "summary": "Information about bridges and their members",
+        "description": "Returns a list of existing bridge interfaces and their current members",
+        "operationId": "members",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/bridgeInfo"
+                }
+              }
+            }
+          },
+          "422": {
+                    "$ref": "#/components/responses/422response"
+          }
+        }
+      }
+    },
+    "/bridgeconfig/config": {
+      "get": {
+        "tags": [
+          "bridgeconfig"
+        ],
+        "summary": "Returns bridge interface configuration information",
+        "description": "Returns all bridge configuration sections in an array",
+        "operationId": "config",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BridgeConfig"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/422response"
+         }
+        }
+      },
+      "post": {
+        "tags": [
+          "bridgeconfig"
+        ],
+        "summary": "Creates new bridge configuration option",
+        "description": "Creates a new option ",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                 "$ref": "#/components/schemas/configBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BridgeConfig"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/422response"
+         }
+        }
+        
+      },
+      "put":{
+        "tags":[
+          "bridgeconfig"
+        ],
+        "summary": "Updates bridge configuration",
+
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                 "$ref": "#/components/schemas/configBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BridgeConfig"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/422response"
+         }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "bridgeInfo": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties":{
+              "bridges":{
+                "type": "array",
+                "items":{
+                  "type": "object",
+                  "properties":{
+                    "name":{
+                      "type": "string"
+                    },
+                    "bridge-members": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "BridgeConfig": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                ".type": {
+                  "type": "string"
+                },
+                "stp": {
+                  "type": "string"
+                },
+                "mtu": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "ports": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [".type", "name"]
+            }
+          }
+        },
+        "required": ["success", "data"]
+      },
+      "configBody": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "stp": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "Spanning tree protocol 1-on 0-off"
+                },
+                "mtu": {
+                  "type": "integer",
+                  "minimum": 98,
+                  "maximum": 65535
+                },
+                "id": {
+                  "type": "string",
+                  "description": "Name of the section you want to edit"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Bridge name must start with br-"
+                }
+              },
+              "required": ["id"]
+            }
+          }
+        }
+      },
+      "default_error": {
+                "title": "default_error",
+                "type": "object",
+                "description": "Default error object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "description": "Error code"
+                    },
+                    "error": {
+                        "type": "string",
+                        "description": "Error message"
+                    },
+                    "source": {
+                        "type": "string",
+                        "description": "Error source"
+                    }
+                }
+            }
+    },
+    "responses":{
+      "422response": {
+                "description": "Error appeared while parsing request",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "success": {
+                                    "type": "boolean",
+                                    "description": "Operation status",
+                                    "default": false
+                                },
+                                "errors": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/default_error"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+      }
+    }
+  }
+}

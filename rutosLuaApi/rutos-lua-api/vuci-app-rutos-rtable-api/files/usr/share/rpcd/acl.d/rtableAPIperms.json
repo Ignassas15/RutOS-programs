@@ -1,0 +1,15 @@
+{
+  "services/rtables": {
+    "description": "Routing table API",
+    "read": {
+      "api": [
+        "/rtables/*"
+      ]
+    },
+    "write": {
+      "api": [
+        
+      ]
+    }
+  }
+}

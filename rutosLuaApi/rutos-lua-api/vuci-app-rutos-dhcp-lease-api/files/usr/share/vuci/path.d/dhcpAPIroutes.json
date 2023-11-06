@@ -1,0 +1,3 @@
+[
+    {"/dhcp_devices/{service_group}/{sid}": "services/dhcp_leases"}
+]

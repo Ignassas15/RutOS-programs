@@ -1,0 +1,14 @@
+{
+  "services/dhcp_devices": {
+    "description": "DHCP device API permissions",
+    "read": {
+      "api": [
+        "/dhcp_devices/*"
+      ]
+    },
+    "write": {
+      "api": [
+      ]
+    }
+  }
+}
